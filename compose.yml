@@ -1,0 +1,127 @@
+version: '3.8'
+
+volumes:
+  redisdata:
+    labels:
+      - "net.maxime-baumann.iut"
+  sqldata:
+    labels:
+      - "net.maxime-baumann.iut"
+  mongodata:
+    labels:
+      - "net.maxime-baumann.iut"
+  neodata:
+    labels:
+      - "net.maxime-baumann.iut"
+
+networks:
+  web:
+    labels:
+      - "net.maxime-baumann.iut"
+
+services:
+  redis:
+    restart: 'no'
+    image: redislabs/redisearch:2.6.4
+    command: --loglevel verbose
+    ports:
+      - 6379:6379
+    volumes:
+      - redisdata:/data
+    labels:
+      - "net.maxime-baumann.iut"
+    networks:
+      - web
+
+  rcli:
+    restart: 'no'
+    image: redislabs/redisearch:2.6.4
+    depends_on:
+      - redis
+    command: >
+      sh -c 'redis-cli -h redis '
+    labels:
+      - "net.maxime-baumann.iut"
+    networks:
+      - web
+
+  readis:
+    restart: 'no'
+    image: hollodotme/readis
+    ports:
+      - 8080:80
+    volumes:
+      - ./config:/code/config:ro
+    depends_on:
+      - redis
+    labels:
+      - "net.maxime-baumann.iut"
+    networks:
+      - web
+
+  phpredisadmin:
+    restart: 'no'
+    image: erikdubbelboer/phpredisadmin
+    environment:
+      - REDIS_1_HOST=redis
+      - REDIS_1_PORT=6379
+    depends_on:
+      - redis
+    ports:
+      - 8081:80
+    labels:
+      - "net.maxime-baumann.iut"
+    networks:
+      - web
+
+  mongo:
+    restart: 'no'
+    image: mongo:4.4.11
+    command: --serviceExecutor adaptive
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - 27017:27017
+    labels:
+      - "net.maxime-baumann.iut"
+    networks:
+      - web
+
+  mgcli:
+    restart: 'no'
+    image: mongo:4.4.11
+    depends_on:
+      - mongo
+    command: >
+      sh -c 'mongo --host mongo '
+    labels:
+      - "net.maxime-baumann.iut"
+    networks:
+      - web
+
+  mongo-express:
+    restart: 'no'
+    image: mongo-express:0.54.0
+    ports:
+      - 8082:8081
+    depends_on:
+      - mongo
+    labels:
+      - "net.maxime-baumann.iut"
+    networks:
+      - web
+
+  neo4j:
+    restart: 'no'
+    image: neo4j:4.1.4
+    ports:
+      - 7474:7474
+      - 7687:7687
+    environment:
+      - NEO4J_AUTH=none
+    volumes:
+      - neodata:/data
+    labels:
+      - "net.maxime-baumann.iut"
+    networks:
+      - web
