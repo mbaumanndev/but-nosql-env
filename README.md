@@ -38,6 +38,16 @@ Pour transférer le port 8080 utilisé par readis, ça donnerait par exemple :
 ssh -L 8080:10.1.137.121:8080 etudiant@10.1.137.121
 ```
 
+Vous pouvez répéter cette opération pour l'ensemble des ports dont vous avez besoin.
+
+- Pour redis : `8080` et `8081`
+- Pour MongoDB : `8082`
+- Pour Neo4j : `7474` et `7687`
+
+> Sous Windows, vous pouvez utiliser Putty pour établir ce transfert de ports.
+>
+> Pour celà, ouvrez Putty, saisissez dedans l'IP de votre machine, et dépliez l'arboresence SSH pour configurer le tunnel.
+
 ### Systèmes Unix avec Make
 
 Que votre ordinateur soit sous Unix ou que vous utilisiez le serveur de l'IUT, vous pouvez utiliser ces commandes make pour démarrer les différents SGBDs.
