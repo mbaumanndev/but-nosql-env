@@ -79,7 +79,7 @@ services:
 
   mongo:
     restart: 'no'
-    image: mongo:5.0
+    image: mongo:6.0
     container_name: mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=mongodb
@@ -95,7 +95,7 @@ services:
 
   mgcli:
     restart: 'no'
-    image: mongo:5.0
+    image: mongo:6.0
     depends_on:
       - mongo
     command: >
