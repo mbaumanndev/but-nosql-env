@@ -79,7 +79,7 @@ services:
 
   mongo:
     restart: 'no'
-    image: mongo:4
+    image: mongo:5.0
     container_name: mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=mongodb
@@ -95,11 +95,11 @@ services:
 
   mgcli:
     restart: 'no'
-    image: mongo:4
+    image: mongo:5.0
     depends_on:
       - mongo
     command: >
-      sh -c 'mongo --host mongo -u mongodb -p mongodb --authenticationDatabase admin admin'
+      sh -c 'mongosh --host mongo -u mongodb -p mongodb --authenticationDatabase admin admin'
     labels:
       - "net.maxime-baumann.iut"
     networks:
